@@ -125,8 +125,8 @@ We can wrap this data
   geom_line(color = "indianred3", 
             size=1 ) +
   geom_smooth() +
-  labs(title = "Semiconductor Stock Price Growth",
-         subtitle = '',
+  labs(title = "Semiconductor Stock ",
+         subtitle = 'Qualcomm Trend',
          x = 'Date',
          y =  "Close Price") +
   theme_minimal() +
@@ -137,7 +137,7 @@ We can wrap this data
 
 
 ```{r}
-semicompanies_return_yearly <-  idm %>%
+semicompanies_return_yearly_idm <-  idm %>%
     group_by(symbol) %>%
     tq_transmute(select     = adjusted, 
                  mutate_fun = periodReturn, 
@@ -146,17 +146,63 @@ semicompanies_return_yearly <-  idm %>%
 ```
 
 ```{r}
-semicompanies_return_yearly %>%
+semicompanies_return_yearly_idm %>%
     ggplot(aes(x = year(date), y = yearly.returns, fill = symbol)) +
     geom_bar(position = "dodge", stat = "identity") +
-    labs(title = "SemiConductors Companies Anual Returns", 
-         subtitle = "",
+    labs(title = "Anual Returns", 
+         subtitle = "IDM Business Model",
          y = "Returns", x = "", color = "") +
     scale_y_continuous(labels = scales::percent) +
     coord_flip() +
     theme_tq() +
     scale_fill_tq()
 ```
+
+```{r}
+semicompanies_return_yearly_fabless <- fabless %>%
+    group_by(symbol) %>%
+    tq_transmute(select     = adjusted, 
+                 mutate_fun = periodReturn, 
+                 period     = "yearly", 
+                 col_rename = "yearly.returns")
+```
+
+
+```{r}
+semicompanies_return_yearly_fabless %>%
+    ggplot(aes(x = year(date), y = yearly.returns, fill = symbol)) +
+    geom_bar(position = "dodge", stat = "identity") +
+    labs(title = "Anual Returns", 
+         subtitle = "Fabless Business Model",
+         y = "Returns", x = "", color = "") +
+    scale_y_continuous(labels = scales::percent) +
+    coord_flip() +
+    theme_tq() +
+    scale_fill_tq()
+```
+
+```{r}
+semicompanies_return_yearly_foundry <- foundry %>%
+    group_by(symbol) %>%
+    tq_transmute(select     = adjusted, 
+                 mutate_fun = periodReturn, 
+                 period     = "yearly", 
+                 col_rename = "yearly.returns")
+```
+
+```{r}
+semicompanies_return_yearly_foundry %>%
+    ggplot(aes(x = year(date), y = yearly.returns, fill = symbol)) +
+    geom_bar(position = "dodge", stat = "identity") +
+    labs(title = "Anual Returns", 
+         subtitle = "Foundry Business Model",
+         y = "Returns", x = "", color = "") +
+    scale_y_continuous(labels = scales::percent) +
+    coord_flip() +
+    theme_tq() +
+    scale_fill_tq()
+```
+
 
 ```{r}
 idm %>% 
