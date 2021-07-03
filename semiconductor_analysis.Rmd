@@ -10,10 +10,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+getOption("repos")
+options(repos = c(CRAN = "https://cran.rstudio.org"))
+```
+
+
+```{r}
 library(tidyquant)
 library(tidyverse)
-library(fpp3)
 library(ggthemes)
+
 ```
 
 ## Download the data
