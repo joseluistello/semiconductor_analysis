@@ -9,16 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
-getOption("repos")
-options(repos = c(CRAN = "https://cran.rstudio.org"))
-```
 
 
 ```{r}
 library(tidyquant)
 library(tidyverse)
 library(ggthemes)
+library(fpp3)
 
 ```
 
@@ -99,6 +96,8 @@ We can wrap this data
     theme_minimal() +
     scale_color_brewer(palette = "Dark2") 
 ```
+
+
 
 ```{r}
   ggplot(fabless, 
@@ -220,4 +219,41 @@ idm %>%
     scale_color_brewer(palette = "Dark2") +
     facet_wrap(~ symbol, ncol = 2, scale = "free_y")
 ```
+
+```{r}
+NVDA <- c("NVDA") %>%
+  tq_get(get  = "stock.prices",
+         from = "2012-01-01",
+         to   = "2021-06-27")
+```
+
+
+Lets model this data with a linear trend type.
+
+
+```{r}
+TSLM(close ~ trend())
+```
+
+```{r}
+NVDA <- as_tsibble(NVDA)
+```
+
+```{r}
+fit <- NVDA %>%
+  model(trend_model = TSLM(close ~ trend()))
+```
+
+```{r}
+fit %>% forecast(h = "10 years")
+```
+
+```{r}
+fit %>%
+  forecast(h = "5 years") %>%
+  autoplot(NVDA) +
+  labs(y = "Close", title = "Forecasting NVDA Stocks")
+
+```
+
 
